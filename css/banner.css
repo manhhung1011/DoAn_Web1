@@ -5,4 +5,9 @@
 		padding-top:  10px;
 		border-bottom: 1px solid #e1e1e1;
 	}
+	.banner img {
+    width: 100%;
+    height: 400px; /* bạn chỉnh tùy ý */
+    object-fit: cover;
+}
 /* ======= End Banner ======== */

@@ -6,7 +6,7 @@ window.onload = function () {
 	autocomplete(document.getElementById('search-box'), list_products);
 
 	// thêm tags (từ khóa) vào khung tìm kiếm
-	var tags = ["Samsung", "iPhone", "Huawei", "Oppo", "Mobi"];
+	var tags = ["Nồi chiên", "Máy xay", "Vợt cầu lông", "Giày thể thao", "Tai nghe bluetooth"];
 	for (var t of tags) addTags(t, "index.html?search=" + t)
 
 	currentuser = getCurrentUser();

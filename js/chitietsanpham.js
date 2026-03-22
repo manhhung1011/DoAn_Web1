@@ -6,7 +6,7 @@ window.onload = function () {
     khoiTao();
 
     // thêm tags (từ khóa) vào khung tìm kiếm
-    var tags = ["Samsung", "iPhone", "Huawei", "Oppo", "Mobi"];
+    var tags = ["Nồi chiên", "Máy xay", "Vợt cầu lông", "Giày thể thao", "Tai nghe bluetooth"];
     for (var t of tags) addTags(t, "index.html?search=" + t, true);
 
     phanTich_URL_chiTietSanPham();
@@ -27,6 +27,7 @@ function phanTich_URL_chiTietSanPham() {
     nameProduct = window.location.href.split('?')[1]; // lấy tên
     if(!nameProduct) return khongTimThaySanPham();
 
+    nameProduct = decodeURIComponent(nameProduct);
     // tách theo dấu '-' vào gắn lại bằng dấu ' ', code này giúp bỏ hết dấu '-' thay vào bằng khoảng trắng.
     // code này làm ngược lại so với lúc tạo href cho sản phẩm trong file classes.js
     nameProduct = nameProduct.split('-').join(' ');
@@ -44,11 +45,11 @@ function phanTich_URL_chiTietSanPham() {
     var divChiTiet = document.getElementsByClassName('chitietSanpham')[0];
 
     // Đổi title
-    document.title = nameProduct + ' - Thế giới điện thoại';
+    document.title = nameProduct + ' - Thế giới mua sắm';
 
     // Cập nhật tên h1
-    var h1 = divChiTiet.getElementsByTagName('h1')[0];
-    h1.innerHTML += nameProduct;
+    var h1 = document.getElementById('product-title');
+    h1.innerHTML = nameProduct;
 
     // Cập nhật sao
     var rating = "";
@@ -78,33 +79,50 @@ function phanTich_URL_chiTietSanPham() {
     // Cập nhật chi tiết khuyến mãi
     document.getElementById('detailPromo').innerHTML = getDetailPromo(sanPhamHienTai);
 
-    // Cập nhật thông số
+    // Cập nhật thông số động - chỉ hiển thị thuộc tính có dữ liệu phù hợp sản phẩm
     var info = document.getElementsByClassName('info')[0];
-    var s = addThongSo('Màn hình', sanPhamHienTai.detail.screen);
-    s += addThongSo('Hệ điều hành', sanPhamHienTai.detail.os);
-    s += addThongSo('Camara sau', sanPhamHienTai.detail.camara);
-    s += addThongSo('Camara trước', sanPhamHienTai.detail.camaraFront);
-    s += addThongSo('CPU', sanPhamHienTai.detail.cpu);
-    s += addThongSo('RAM', sanPhamHienTai.detail.ram);
-    s += addThongSo('Bộ nhớ trong', sanPhamHienTai.detail.rom);
-    s += addThongSo('Thẻ nhớ', sanPhamHienTai.detail.microUSB);
-    s += addThongSo('Dung lượng pin', sanPhamHienTai.detail.battery);
+    var s = '';
+    var detail = sanPhamHienTai.detail;
+    var specs = {
+        'Màn hình': 'screen',
+        'Hệ điều hành': 'os',
+        'Camera sau': 'camara',
+        'Camera trước': 'camaraFront',
+        'CPU': 'cpu',
+        'RAM': 'ram',
+        'Bộ nhớ trong': 'rom',
+        'Thẻ nhớ': 'microUSB',
+        'Pin': 'battery',
+        'Chất liệu': 'material',
+        'Kích cỡ': 'size',
+        'Màu sắc': 'colors'
+    };
+    for(var specName in specs) {
+        var field = specs[specName];
+        if(detail[field]) {
+            s += addThongSo(specName, detail[field]);
+        }
+    }
+    if(s == '') s = '<li><p>Chưa có thông số chi tiết</p></li>';
     info.innerHTML = s;
 
-    // Cập nhật hình
+// Cập nhật hình
     var hinh = divChiTiet.getElementsByClassName('picture')[0];
     hinh = hinh.getElementsByTagName('img')[0];
     hinh.src = sanPhamHienTai.img;
     document.getElementById('bigimg').src = sanPhamHienTai.img;
 
-    // Hình nhỏ
-    addSmallImg("img/products/huawei-mate-20-pro-green-600x600.jpg");
-    addSmallImg("img/chitietsanpham/oppo-f9-mau-do-1-org.jpg");
-    addSmallImg("img/chitietsanpham/oppo-f9-mau-do-2-org.jpg");
-    addSmallImg("img/chitietsanpham/oppo-f9-mau-do-3-org.jpg");
-    addSmallImg("img/products/huawei-mate-20-pro-green-600x600.jpg");
-    addSmallImg("img/chitietsanpham/oppo-f9-mau-do-3-org.jpg");
-    addSmallImg("img/products/huawei-mate-20-pro-green-600x600.jpg");
+    // Hình nhỏ - dynamic based on product masp
+    var smallImgs = [
+        sanPhamHienTai.img,
+        'img/chitietsanpham/' + sanPhamHienTai.masp + '-1.jpg',
+        'img/chitietsanpham/' + sanPhamHienTai.masp + '-2.jpg',
+        'img/chitietsanpham/' + sanPhamHienTai.masp + '-3.jpg'
+    ];
+    for(var i=0; i<smallImgs.length; i++) {
+        if(i % 2 == 0) addSmallImg(sanPhamHienTai.img);
+        else addSmallImg(smallImgs[i]);
+    }
 
     // Khởi động thư viện hỗ trợ banner - chỉ chạy sau khi tạo xong hình nhỏ
     var owl = $('.owl-carousel');

@@ -532,7 +532,7 @@ function addTopNav() {
                 <li><a href="tintuc.html"><i class="fa fa-newspaper-o"></i> Tin tức</a></li>
                 <li><a href="tuyendung.html"><i class="fa fa-handshake-o"></i> Tuyển dụng</a></li>
                 <li><a href="gioithieu.html"><i class="fa fa-info-circle"></i> Giới thiệu</a></li>
-                <li><a href="trungtambaohanh.html"><i class="fa fa-wrench"></i> Bảo hành</a></li>
+                <li><a href="chinhsachbaohanh.html"><i class="fa fa-wrench"></i> Bảo hành</a></li>
                 <li><a href="lienhe.html"><i class="fa fa-phone"></i> Liên hệ</a></li>
             </ul> <!-- End Quick link -->
         </section><!-- End Section -->
@@ -545,7 +545,7 @@ function addHeader() {
 	<div class="header group">
         <div class="logo">
             <a href="index.html">
-                <img src="img/logo.jpg" alt="Trang chủ Smartphone Store" title="Trang chủ Smartphone Store">
+                <img src="img/logo.png" alt="Shopify" title="Shopify">
             </a>
         </div> <!-- End Logo -->
 
@@ -606,8 +606,7 @@ function addFooter() {
 
     <!-- ============== Footer ============= -->
     <div class="copy-right">
-        <p><a href="index.html">LDD Phone Store</a> - All rights reserved © 2021 - Designed by
-            <span style="color: #eee; font-weight: bold">group 15th</span></p>
+        <p>Shop36 - Shopping online 2026: nhanh chóng, an toàn, tiện lợi.</p>
     </div>`);
 }
 
@@ -709,7 +708,7 @@ function addPlc() {
     <div class="plc">
         <section>
             <ul class="flexContain">
-                <li>Giao hàng hỏa tốc trong 1 giờ</li>
+                <li>Giao hàng hỏa tốc</li>
                 <li>Thanh toán linh hoạt: tiền mặt, visa / master, trả góp</li>
                 <li>Trải nghiệm sản phẩm tại nhà</li>
                 <li>Lỗi đổi tại nhà trong 1 ngày</li>

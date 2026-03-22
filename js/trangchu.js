@@ -2,7 +2,7 @@ window.onload = function () {
 	khoiTao();
 
 	// Thêm hình vào banner
-	addBanner("img/banners/banner0.gif", "img/banners/banner0.gif");
+	addBanner("img/banners/banner0.png", "img/banners/banner0.png");
 	var numBanner = 9; // Số lượng hình banner
 	for (var i = 1; i <= numBanner; i++) {
 		var linkimg = "img/banners/banner" + i + ".png";
@@ -25,15 +25,23 @@ window.onload = function () {
 	autocomplete(document.getElementById('search-box'), list_products);
 
 	// thêm tags (từ khóa) vào khung tìm kiếm
-	var tags = ["Samsung", "iPhone", "Huawei", "Oppo", "Mobi"];
+	var tags = ["Nồi chiên", "Máy xay", "Vợt cầu lông", "Giày thể thao", "Tai nghe bluetooth"];
 	for (var t of tags) addTags(t, "index.html?search=" + t);
 
-	// Thêm danh sách hãng điện thoại
-	var company = ["Apple.jpg", "Samsung.jpg", "Oppo.jpg", "Nokia.jpg", "Huawei.jpg", "Xiaomi.png",
-		"Realme.png", "Vivo.jpg", "Philips.jpg", "Mobell.jpg", "Mobiistar.jpg", "Itel.jpg",
-		"Coolpad.png", "HTC.jpg", "Motorola.jpg"
+	// Thêm danh mục
+	var categories = [
+		{ name: "Thời Trang Nam", img: "img/tensanpham/Thoitrangnam.png", link: "index.html?search=Thời+Trang+Nam" },
+		{ name: "Điện Thoại & Phụ Kiện", img: "img/tensanpham/DienTuVaPhuKien.png", link: "index.html?search=Điện+Thoại+Phụ+Kiện" },
+		{ name: "Thiết Bị Điện Tử", img: "img/tensanpham/ThietBiDienTu.png", link: "index.html?search=Thiết+Bị+Điện+Tử" },
+		{ name: "Máy Tính & Laptop", img: "img/tensanpham/MayTInh.png", link: "index.html?search=Máy+Tính+Laptop" },
+		{ name: "Máy Ảnh & Quay Phim", img: "img/tensanpham/MayAnh.png", link: "index.html?search=Máy+Ảnh+Quay+Phim" },
+		{ name: "Đồng Hồ", img: "img/tensanpham/DongHo.png", link: "index.html?search=Đồng+Hồ" },
+		{ name: "Giày Dép Nam", img: "img/tensanpham/GiayDep.png", link: "index.html?search=Giày+Dép+Nam" },
+		{ name: "Thiết Bị Điện Gia Dụng", img: "img/tensanpham/ThietbiDienGiaDung.png", link: "index.html?search=Thiết+Bị+Điện+Gia+Dụng" },
+		{ name: "Thể Thao & Du Lịch", img: "img/tensanpham/TheThao.png", link: "index.html?search=Thể+Thao+Du+Lịch" },
+		{ name: "Ô Tô & Xe Máy", img: "img/tensanpham/Xemay.png", link: "index.html?search=Ô+Tô+Xe+Máy" }
 	];
-	for (var c of company) addCompany("img/company/" + c, c.slice(0, c.length - 4));
+	for (var cat of categories) addCategory(cat.img, cat.name, cat.link);
 
 	// Thêm sản phẩm vào trang
 	var sanPhamPhanTich
@@ -129,7 +137,6 @@ function getFilterFromURL() { // tách và trả về mảng bộ lọc trên ur
 }
 
 function phanTich_URL(filters, saveFilter) {
-	// var filters = getFilterFromURL();
 	var result = copyObject(list_products);
 
 	for (var i = 0; i < filters.length; i++) {
@@ -217,7 +224,6 @@ function phanTich_URL(filters, saveFilter) {
 	return result;
 }
 
-// thêm các sản phẩm từ biến mảng nào đó vào trang
 function addProductsFrom(list, vitri, soluong) {
 	var start = vitri || 0;
 	var end = (soluong ? start + soluong : list.length);
@@ -230,51 +236,36 @@ function clearAllProducts() {
 	document.getElementById('products').innerHTML = "";
 }
 
-// Thêm sản phẩm vào các khung sản phẩm
 function addKhungSanPham(tenKhung, color, filter, len, ele) {
-	// convert color to code
-	var gradient = `background-image: linear-gradient(120deg, ` + color[0] + ` 0%, ` + color[1] + ` 50%, ` + color[0] + ` 100%);`
+	var gradient = `background-image: linear-gradient(120deg, ` + color[0] + ` 0%, ` + color[1] + ` 50%, ` + color[0] + ` 100%);`;
 	var borderColor = `border-color: ` + color[0];
-	var borderA = `	border-left: 2px solid ` + color[0] + `;
-					border-right: 2px solid ` + color[0] + `;`;
+	var borderA = `	border-left: 2px solid ` + color[0] + `;\n\t\t		border-right: 2px solid ` + color[0] + `;`;
 
-	// mở tag
-	var s = `<div class="khungSanPham" style="` + borderColor + `">
-				<h3 class="tenKhung" style="` + gradient + `">* ` + tenKhung + ` *</h3>
-				<div class="listSpTrongKhung flexContain">`;
+	var s = `<div class="khungSanPham" style="` + borderColor + `">\n\t\t\t\t<h3 class="tenKhung" style="` + gradient + `">* ` + tenKhung + ` *</h3>\n\t\t\t\t<div class="listSpTrongKhung flexContain">`;
 
-	// thêm các <li> (sản phẩm) vào tag
 	var spResult = phanTich_URL(filter, false);
 	if (spResult.length < len) len = spResult.length;
 
 	for (var i = 0; i < len; i++) {
 		s += addProduct(spResult[i], null, true);
-		// truyền vào 'true' để trả về chuỗi rồi gán vào s
 	}
 
-	// thêm nút xem tất cả rồi đóng tag
-	s += `	</div>
-			<a class="xemTatCa" href="index.html?` + filter.join('&') + `" style="` + borderA + `">
-				Xem tất cả ` + spResult.length + ` sản phẩm
-			</a>
-		</div> <hr>`;
+	s += `\n\t\t\t\t</div>\n\t\t\t\t<a class="xemTatCa" href="index.html?` + filter.join('&') + `" style="` + borderA + `">\n\t\t\t\t\tXem tất cả ` + spResult.length + ` sản phẩm\n\t\t\t\t</a>\n\t\t\t</div> <hr>`;
 
-	// thêm khung vào contain-khung
 	ele.innerHTML += s;
 }
 
-// Nút phân trang
 function themNutPhanTrang(soTrang, trangHienTai) {
 	var divPhanTrang = document.getElementsByClassName('pagination')[0];
 
-	var k = createLinkFilter('remove', 'page'); // xóa phân trang cũ
+	var k = createLinkFilter('remove', 'page');
 	if (k.indexOf('?') > 0) k += '&';
-	else k += '?'; // thêm dấu
+	else k += '?';
 
-	if (trangHienTai > 1) // Nút về phân trang trước
+	if (trangHienTai > 1)
 		divPhanTrang.innerHTML = `<a href="` + k + `page=` + (trangHienTai - 1) + `"><i class="fa fa-angle-left"></i></a>`;
 
-	if (soTrang > 1) // Chỉ hiện nút phân trang nếu số trang > 1
+	if (soTrang > 1)
 		for (var i = 1; i <= soTrang; i++) {
 			if (i == trangHienTai) {
 				divPhanTrang.innerHTML += `<a href="javascript:;" class="current">` + i + `</a>`
@@ -284,13 +275,11 @@ function themNutPhanTrang(soTrang, trangHienTai) {
 			}
 		}
 
-	if (trangHienTai < soTrang) { // Nút tới phân trang sau
+	if (trangHienTai < soTrang) {
 		divPhanTrang.innerHTML += `<a href="` + k + `page=` + (trangHienTai + 1) + `"><i class="fa fa-angle-right"></i></a>`
 	}
 }
 
-// Tính toán xem có bao nhiêu trang + trang hiện tại,
-// Trả về mảng sản phẩm trong trang hiện tại tính được
 function tinhToanPhanTrang(list, vitriTrang) {
 	var sanPhamDu = list.length % soLuongSanPhamMaxTrongMotTrang;
 	var soTrang = parseInt(list.length / soLuongSanPhamMaxTrongMotTrang) + (sanPhamDu ? 1 : 0);
@@ -303,11 +292,6 @@ function tinhToanPhanTrang(list, vitriTrang) {
 
 	return temp.splice(start, soLuongSanPhamMaxTrongMotTrang);
 }
-
-// ======== TÌM KIẾM (Từ mảng list truyền vào, trả về 1 mảng kết quả) ============
-
-// function timKiemTheoTen(list, ten, soluong) {}
-// hàm Tìm-kiếm-theo-tên được đặt trong dungchung.js , do trang chitietsanpham cũng cần dùng tới nó
 
 function timKiemTheoCongTySanXuat(list, tenCongTy, soluong) {
 	var count, result = [];
@@ -389,8 +373,6 @@ function timKiemTheoRAM(list, luongRam, soluong) {
 	return result;
 }
 
-// ========== LỌC ===============
-// Thêm bộ lọc đã chọn vào html
 function addChoosedFilter(type, textInside) {
 	var link = createLinkFilter('remove', type);
 	var tag_a = `<a href="` + link + `"><h3>` + textInside + ` <i class="fa fa-close"></i> </h3></a>`;
@@ -403,10 +385,7 @@ function addChoosedFilter(type, textInside) {
 	deleteAll.href = window.location.href.split('?')[0];
 }
 
-// Thêm nhiều bộ lọc cùng lúc 
 function addAllChoosedFilter() {
-	// Thêm từ biến lưu giữ bộ lọc 'filtersFromUrl'
-
 	if (filtersFromUrl.company != '')
 		addChoosedFilter('company', filtersFromUrl.company);
 
@@ -431,12 +410,9 @@ function addAllChoosedFilter() {
 	}
 }
 
-// Tạo link cho bộ lọc
-// type là 'add' hoặc 'remove',
-// tương ứng 'thêm' bộ lọc mới có giá trị = valueAdd, hoặc 'xóa' bộ lọc đã có
 function createLinkFilter(type, nameFilter, valueAdd) {
 	var o = copyObject(filtersFromUrl);
-	o.page = ''; // reset phân trang
+	o.page = '';
 
 	if (nameFilter == 'sort') {
 		if (type == 'add') {
@@ -452,10 +428,9 @@ function createLinkFilter(type, nameFilter, valueAdd) {
 		else if (type == 'remove') o[nameFilter] = '';
 	}
 
-	var link = 'index.html'; //window.location.href.split('?')[0].replace('#', '');
-	var h = false; // Đã có dấu hỏi hay chưa
+	var link = 'index.html';
+	var h = false;
 
-	// thêm những filter trước sort
 	for (var i in o) {
 		if (i != 'sort' && o[i]) {
 			link += (h ? '&' : '?') + i + '=' + o[i];
@@ -463,53 +438,46 @@ function createLinkFilter(type, nameFilter, valueAdd) {
 		}
 	}
 
-	// thêm sort (do sort trong filtersFromUrl là kiểu object, khác với kiểu string của những loại còn lại)
-	// nên lúc tạo link sẽ khác những loại trên
 	if (o.sort.by != '')
 		link += (h ? '&' : '?') + 'sort=' + o.sort.by + '-' + o.sort.type;
 
 	return link;
 }
 
-// Thông báo nếu không có sản phẩm
 function alertNotHaveProduct(coSanPham) {
 	var thongbao = document.getElementById('khongCoSanPham');
 	if (!coSanPham) {
 		thongbao.style.width = "auto";
 		thongbao.style.opacity = "1";
-		thongbao.style.margin = "auto"; // Căn giữa
-		thongbao.style.transitionDuration = "1s"; // hiện ra từ từ
+		thongbao.style.margin = "auto";
+		thongbao.style.transitionDuration = "1s";
 
 	} else {
 		thongbao.style.width = "0";
 		thongbao.style.opacity = "0";
 		thongbao.style.margin = "0";
-		thongbao.style.transitionDuration = "0s"; // Ngay lâp tức biến mất
+		thongbao.style.transitionDuration = "0s";
 	}
 }
 
-// ========== Lọc TRONG TRANG ============
-// Hiển thị Sản phẩm
 function showLi(li) {
 	li.style.opacity = 1;
 	li.style.width = "239px";
 	li.style.borderWidth = "1px";
 }
-// Ẩn sản phẩm
+
 function hideLi(li) {
 	li.style.width = 0;
 	li.style.opacity = 0;
 	li.style.borderWidth = "0";
 }
 
-// Lấy mảng sản phẩm trong trang hiện tại (ở dạng tag html)
 function getLiArray() {
 	var ul = document.getElementById('products');
 	var listLi = ul.getElementsByTagName('li');
 	return listLi;
 }
 
-// lọc theo tên
 function getNameFromLi(li) {
 	var a = li.getElementsByTagName('a')[0];
 	var h3 = a.getElementsByTagName('h3')[0];
@@ -536,11 +504,9 @@ function filterProductsName(ele) {
 		}
 	}
 
-	// Thông báo nếu không có sản phẩm
 	alertNotHaveProduct(coSanPham);
 }
 
-// lọc theo số lượng sao
 function getStarFromLi(li) {
 	var a = li.getElementsByTagName('a')[0];
 	var divRate = a.getElementsByClassName('ratingresult');
@@ -557,7 +523,7 @@ function filterProductsStar(num) {
 	var coSanPham = false;
 
 	for (var i = 0; i < listLi.length; i++) {
-		if (getStarFromLi(listLi) >= num) {
+		if (getStarFromLi(listLi[i]) >= num) {
 			showLi(listLi[i]);
 			coSanPham = true;
 
@@ -566,33 +532,37 @@ function filterProductsStar(num) {
 		}
 	}
 
-	// Thông báo nếu không có sản phẩm
 	alertNotHaveProduct(coSanPham);
 }
 
-// ================= Hàm khác ==================
-
-// Thêm banner
 function addBanner(img, link) {
-	var newDiv = `<div class='item'>
-						<a target='_blank' href=` + link + `>
-							<img src=` + img + `>
-						</a>
-					</div>`;
+	var newDiv = `<div class='item'>\n\t\t\t\t\t<a target='_blank' href=` + link + `>\n\t\t\t\t\t\t<img src=` + img + `>\n\t\t\t\t\t</a>\n\t\t\t</div>`;
 	var banner = document.getElementsByClassName('owl-carousel')[0];
 	banner.innerHTML += newDiv;
 }
 
-// Thêm hãng sản xuất
 function addCompany(img, nameCompany) {
 	var link = createLinkFilter('add', 'company', nameCompany);
 	var new_tag = `<a href=` + link + `><img src=` + img + `></a>`;
 
 	var khung_hangSanXuat = document.getElementsByClassName('companyMenu')[0];
-	khung_hangSanXuat.innerHTML += new_tag;
+	if (khung_hangSanXuat) khung_hangSanXuat.innerHTML += new_tag;
 }
 
-// Thêm chọn mức giá
+function addCategory(img, nameCategory, link) {
+	var categoryGrid = document.getElementsByClassName('category-grid')[0];
+	if (!categoryGrid) {
+		console.log('Error: category-grid not found');
+		return;
+	}
+	var s = `<a class="category-card" href="${link}">
+		<div class="category-icon"><img src="${img}" alt="${nameCategory}"></div>
+		<div class="category-name">${nameCategory}</div>
+	</a>`;
+	categoryGrid.innerHTML += s;
+	console.log('Added category:', nameCategory);
+}
+
 function addPricesRange(min, max) {
 	var text = priceToString(min, max);
 	var link = createLinkFilter('add', 'price', min + '-' + max);
@@ -602,7 +572,6 @@ function addPricesRange(min, max) {
 		.getElementsByClassName('dropdown-content')[0].innerHTML += mucgia;
 }
 
-// Thêm chọn khuyến mãi
 function addPromotion(name) {
 	var link = createLinkFilter('add', 'promo', name);
 
@@ -612,7 +581,6 @@ function addPromotion(name) {
 		.getElementsByClassName('dropdown-content')[0].innerHTML += promo;
 }
 
-// Thêm chọn số lượng sao
 function addStarFilter(value) {
 	var link = createLinkFilter('add', 'star', value);
 
@@ -622,7 +590,6 @@ function addStarFilter(value) {
 		.getElementsByClassName('dropdown-content')[0].innerHTML += star;
 }
 
-// Thêm chọn sắp xếp theo giá
 function addSortFilter(type, nameFilter, text) {
 	var link = createLinkFilter('add', 'sort', {
 		by: nameFilter,
@@ -634,14 +601,12 @@ function addSortFilter(type, nameFilter, text) {
 		.getElementsByClassName('dropdown-content')[0].innerHTML += sortTag;
 }
 
-// Chuyển mức giá về dạng chuỗi tiếng việt
 function priceToString(min, max) {
 	if (min == 0) return 'Dưới ' + max / 1E6 + ' triệu';
 	if (max == 0) return 'Trên ' + min / 1E6 + ' triệu';
 	return 'Từ ' + min / 1E6 + ' - ' + max / 1E6 + ' triệu';
 }
 
-// Chuyển khuyến mãi vễ dạng chuỗi tiếng việt
 function promoToString(name) {
 	switch (name) {
 		case 'tragop':
@@ -655,12 +620,10 @@ function promoToString(name) {
 	}
 }
 
-// Chuyển số sao về dạng chuỗi tiếng việt
 function starToString(star) {
 	return 'Trên ' + (star - 1) + ' sao';
 }
 
-// Chuyển các loại sắp xếp về dạng chuỗi tiếng việt
 function sortToString(sortBy) {
 	switch (sortBy) {
 		case 'price':
@@ -676,7 +639,6 @@ function sortToString(sortBy) {
 	}
 }
 
-// Hàm Test, chưa sử dụng
 function hideSanPhamKhongThuoc(list) {
 	var allLi = getLiArray();
 	for (var i = 0; i < allLi.length; i++) {
