@@ -150,7 +150,7 @@
 				padding: 10px;
 				border-radius: 50%;
 				border: 1px solid #ccc;
-				background-color: #fff;
+				background-color: transparent;
 				color: #000;
 				-webkit-transition: 0.2s;
 				-o-transition: 0.2s;

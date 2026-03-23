@@ -8,16 +8,14 @@ var list_products = [
     "star": 4,
     "rateCount": 128,
     "promo": { "name": "giamgia", "value": "50.000" },
-    "detail": {
-        "screen": "100% Cotton",
-        "os": "Thoáng khí, co giãn",
-        "camara": "XS đến 3XL",
-        "camaraFront": "Nhiều màu",
-        "cpu": "Tiêu chuẩn quốc tế",
-        "ram": "Siêu mềm",
-        "rom": "Bền lâu",
-        "microUSB": "Dễ giặt",
-        "battery": "Hàng Việt Nam"
+"detail": {
+      "material": "100% Cotton",
+      "fit": "Thoáng khí, co giãn 4 chiều",
+      "size": "XS - 3XL",
+      "colors": "Trắng, Đen, Xanh, Xám (Nhiều màu)",
+      "fabric": "Siêu mềm, thoáng mát",
+      "care": "Dễ giặt, không phai màu",
+      "origin": "Hàng Việt Nam chất lượng cao"
     },
     "masp": "TTM0"
 },
@@ -29,16 +27,14 @@ var list_products = [
     "star": 5,
     "rateCount": 256,
     "promo": { "name": "tragop", "value": "0" },
-    "detail": {
-        "screen": "Khaki cotton",
-        "os": "Form chuẩn",
-        "camara": "28 đến 38",
-        "camaraFront": "Xám, Be, Đen",
-        "cpu": "Ít nhăn",
-        "ram": "Thoáng khí",
-        "rom": "Bền màu",
-        "microUSB": "Sang trọng",
-        "battery": "Nam tính"
+"detail": {
+      "material": "Khaki cotton cao cấp",
+      "fit": "Slim fit chuẩn form",
+      "size": "28 - 38",
+      "colors": "Xám, Be, Đen",
+      "fabric": "Ít nhăn, thoáng khí, bền màu",
+      "feature": "Sang trọng, nam tính",
+      "care": "Giặt máy an toàn"
     },
     "masp": "TTM1"
 },

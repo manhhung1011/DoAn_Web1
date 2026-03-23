@@ -32,8 +32,20 @@ function phanTich_URL_chiTietSanPham() {
     // code này làm ngược lại so với lúc tạo href cho sản phẩm trong file classes.js
     nameProduct = nameProduct.split('-').join(' ');
 
+    // Fuzzy name matching with diacritics normalization
+    function normalizeName(name) {
+        return name.toLowerCase()
+            .replace(/[àáạảãâầấậẩẫăằắặẳẵ]/g, 'a')
+            .replace(/[èéẹẻẽêềếệểễ]/g, 'e')
+            .replace(/[ìíịỉĩ]/g, 'i')
+            .replace(/[òóọỏõôồốộổỗơờớợởỡ]/g, 'o')
+            .replace(/[ùúụủũưừứựửữ]/g, 'u')
+            .replace(/[ỳýỵỷỹ]/g, 'y')
+            .replace(/đ/g, 'd');
+    }
+    var normalizedQuery = normalizeName(nameProduct);
     for(var p of list_products) {
-        if(nameProduct == p.name) {
+        if(normalizeName(p.name) === normalizedQuery) {
             maProduct = p.masp;
             break;
         }
@@ -84,23 +96,33 @@ function phanTich_URL_chiTietSanPham() {
     var s = '';
     var detail = sanPhamHienTai.detail;
     var specs = {
+        'Chất liệu': 'material',
+        'Kích thước': 'size',
+        'Màu sắc': 'colors',
+        'Chất liệu vải': 'fabric',
+        'Form dáng': 'fit',
+        'Công suất': 'power',
+        'Dung tích': 'capacity',
         'Màn hình': 'screen',
         'Hệ điều hành': 'os',
-        'Camera sau': 'camara',
-        'Camera trước': 'camaraFront',
         'CPU': 'cpu',
         'RAM': 'ram',
         'Bộ nhớ trong': 'rom',
-        'Thẻ nhớ': 'microUSB',
         'Pin': 'battery',
-        'Chất liệu': 'material',
-        'Kích cỡ': 'size',
-        'Màu sắc': 'colors'
+        'Camera sau': 'camara',
+        'Camera trước': 'camaraFront'
     };
+    // Universal specs - show all available
     for(var specName in specs) {
         var field = specs[specName];
         if(detail[field]) {
             s += addThongSo(specName, detail[field]);
+        }
+    }
+    // Add unmapped details
+    for(var key in detail) {
+        if(!Object.values(specs).includes(key)) {
+            s += '<li><p>' + key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1') + ':</p><div>' + detail[key] + '</div></li>';
         }
     }
     if(s == '') s = '<li><p>Chưa có thông số chi tiết</p></li>';
@@ -109,19 +131,17 @@ function phanTich_URL_chiTietSanPham() {
 // Cập nhật hình
     var hinh = divChiTiet.getElementsByClassName('picture')[0];
     hinh = hinh.getElementsByTagName('img')[0];
-    hinh.src = sanPhamHienTai.img;
-    document.getElementById('bigimg').src = sanPhamHienTai.img;
+    var localImg = localProductImages[sanPhamHienTai.masp] || 'img/products/placeholder-product.jpg' || sanPhamHienTai.img;
+    hinh.src = localImg;
+    hinh.onerror = function() { this.src = 'img/logo.png'; }; // fallback
+    document.getElementById('bigimg').src = localImg;
+    document.getElementById('bigimg').onerror = function() { this.src = 'img/logo.png'; };
 
     // Hình nhỏ - dynamic based on product masp
-    var smallImgs = [
-        sanPhamHienTai.img,
-        'img/chitietsanpham/' + sanPhamHienTai.masp + '-1.jpg',
-        'img/chitietsanpham/' + sanPhamHienTai.masp + '-2.jpg',
-        'img/chitietsanpham/' + sanPhamHienTai.masp + '-3.jpg'
-    ];
+    var mainImg = localProductImages[sanPhamHienTai.masp] || sanPhamHienTai.img;
+    var smallImgs = [mainImg, mainImg, mainImg, mainImg]; // fallback to main for all small
     for(var i=0; i<smallImgs.length; i++) {
-        if(i % 2 == 0) addSmallImg(sanPhamHienTai.img);
-        else addSmallImg(smallImgs[i]);
+        addSmallImg(smallImgs[i]);
     }
 
     // Khởi động thư viện hỗ trợ banner - chỉ chạy sau khi tạo xong hình nhỏ
